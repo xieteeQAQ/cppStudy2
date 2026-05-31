@@ -173,5 +173,37 @@ void Map::show()
 
 void Map::movePlayer(const int dx, const int dy)
 {
-    _player.move(dx, dy);
+    int x = _player.where()[0] + dx;
+    int y = _player.where()[1] + dy;
+    if (x < 0 || x > _rows - 1)
+        return;
+    else
+        _player.move(dx, 0);
+    if (y < 0 || y > _columns - 1)
+        return;
+    else
+        _player.move(0, dy);
+}
+
+Player &Map::player()
+{
+    return this->_player;
+}
+
+int &Map::rows()
+{
+    return this->_rows;
+}
+int &Map::cols()
+{
+    return this->_columns;
+}
+mv &Map::map()
+{
+    return this->_map;
+}
+
+void Map::inPlayer(Player &player)
+{
+    _player = player;
 }

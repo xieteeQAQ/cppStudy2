@@ -18,6 +18,11 @@ public:
     explicit Map(const std::string &mapName, const int &rows, const int &cols, const mv &initMap);
     explicit Map(const std::string &mapName, const mv &initMap);
 
+    Player &player();
+    int &rows();
+    int &cols();
+    mv &map();
+    void inPlayer(Player &player);
     void setMapSize(const int &rows, const int &cols);
     void init(const mv &initMap);
     void refresh();
