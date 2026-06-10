@@ -14,7 +14,6 @@ public:
     void to(const int x, const int y);
     int x() const;
     int y() const;
-    std::vector<int> where() const;
 
     Player operator=(Player player);
 

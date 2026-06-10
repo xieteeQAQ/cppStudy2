@@ -13,14 +13,6 @@ void Player::move(const int dx, const int dy)
     _y = _y < 0 ? 0 : _y + dy;
 }
 
-std::vector<int> Player::where() const
-{
-    int x = _x;
-    int y = _y;
-    std::vector<int> _x_y = {x, y};
-    return _x_y;
-}
-
 void Player::to(const int x, const int y)
 {
     _x = x;

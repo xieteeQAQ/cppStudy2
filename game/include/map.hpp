@@ -5,7 +5,9 @@
 #include <string>
 #include "Player.hpp"
 
+extern const std::string P;
 extern const std::string F;
+extern const std::string W;
 extern const std::string B;
 
 extern const std::string UP;
@@ -13,6 +15,9 @@ extern const std::string RIGHT;
 extern const std::string DOWN;
 extern const std::string LEFT;
 extern const std::string QUIT;
+
+extern const std::string COM_P;
+extern const std::string COM_B;
 
 using mv = std::vector<std::vector<std::string>>;
 
@@ -36,6 +41,7 @@ public:
     void show() const;
     void movePlayer(const int dx, const int dy);
     void setPlayerPosition(const int x, const int y);
+    void moveBox(const int dx, const int dy);
     std::vector<std::string> keyAnalyse(std::string &keys) const;
 
 private:

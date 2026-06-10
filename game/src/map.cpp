@@ -1,14 +1,19 @@
 #include <algorithm>
 #include "../include/map.hpp"
 
+const std::string P = "@ ";
 const std::string F = ". ";
-const std::string B = "■ ";
+const std::string W = "■ ";
+const std::string B = "□ ";
 
 const std::string UP = "UP";
 const std::string RIGHT = "RIGHT";
 const std::string DOWN = "DOWN";
 const std::string LEFT = "LEFT";
 const std::string QUIT = "QUIT";
+
+const std::string COM_P = "COM_P";
+const std::string COM_B = "COM_B";
 
 using mv = std::vector<std::vector<std::string>>;
 
@@ -148,10 +153,11 @@ void Map::refresh()
     {
         for (size_t r = 0; r < _map.at(c).size(); ++r)
         {
+            std::string &str = _map.at(c).at(r);
             if (r == _player.x() && c == _player.y())
-                _map.at(c).at(r) = "@ ";
-            else if (_map.at(c).at(r) != B)
-                _map.at(c).at(r) = F;
+                str = "@ ";
+            else if (str != W && str != B)
+                str = F;
         }
     }
 }
@@ -218,6 +224,7 @@ void Map::inPlayer(Player &player)
 std::vector<std::string> Map::keyAnalyse(std::string &keys) const
 {
     std::vector<std::string> result{};
+    std::string flag{};
     int x = _player.x();
     int y = _player.y();
     for (const auto &c : keys)
@@ -227,9 +234,31 @@ std::vector<std::string> Map::keyAnalyse(std::string &keys) const
         case 'w':
             if (y != 0)
             {
-                if (_map.at(y - 1).at(x) != B)
+                std::string up = _map.at(y - 1).at(x);
+                if (up == F)
                 {
                     --y;
+                    if (flag == B || flag.empty())
+                    {
+                        flag = P;
+                        result.push_back(COM_P);
+                    }
+                    result.push_back(UP);
+                }
+                else if (up == B && y != 1 && _map.at(y - 2).at(x) != W)
+                {
+                    --y;
+                    if (flag == P || flag.empty())
+                    {
+                        flag = B;
+                        result.push_back(COM_B);
+                    }
+                    result.push_back(UP);
+                    if (flag == B || flag.empty())
+                    {
+                        flag = P;
+                        result.push_back(COM_P);
+                    }
                     result.push_back(UP);
                 }
             }
@@ -237,9 +266,31 @@ std::vector<std::string> Map::keyAnalyse(std::string &keys) const
         case 'a':
             if (x != 0)
             {
-                if (_map.at(y).at(x - 1) != B)
+                std::string left = _map.at(y).at(x - 1);
+                if (left == F)
                 {
                     --x;
+                    if (flag == B || flag.empty())
+                    {
+                        flag = P;
+                        result.push_back(COM_P);
+                    }
+                    result.push_back(LEFT);
+                }
+                else if (left == B && x != 1 && _map.at(y).at(x - 2) != W)
+                {
+                    --x;
+                    if (flag == P || flag.empty())
+                    {
+                        flag = B;
+                        result.push_back(COM_B);
+                    }
+                    result.push_back(LEFT);
+                    if (flag == B || flag.empty())
+                    {
+                        flag = P;
+                        result.push_back(COM_P);
+                    }
                     result.push_back(LEFT);
                 }
             }
@@ -247,9 +298,31 @@ std::vector<std::string> Map::keyAnalyse(std::string &keys) const
         case 's':
             if (y != _columns - 1)
             {
-                if (_map.at(y + 1).at(x) != B)
+                std::string down = _map.at(y + 1).at(x);
+                if (down == F)
                 {
                     ++y;
+                    if (flag == B || flag.empty())
+                    {
+                        flag = P;
+                        result.push_back(COM_P);
+                    }
+                    result.push_back(DOWN);
+                }
+                else if (down == B && y != _columns - 2 && _map.at(y + 2).at(x) != W)
+                {
+                    ++y;
+                    if (flag == P || flag.empty())
+                    {
+                        flag = B;
+                        result.push_back(COM_B);
+                    }
+                    result.push_back(DOWN);
+                    if (flag == B || flag.empty())
+                    {
+                        flag = P;
+                        result.push_back(COM_P);
+                    }
                     result.push_back(DOWN);
                 }
             }
@@ -257,9 +330,31 @@ std::vector<std::string> Map::keyAnalyse(std::string &keys) const
         case 'd':
             if (x != _rows - 1)
             {
-                if (_map.at(y).at(x + 1) != B)
+                std::string right = _map.at(y).at(x + 1);
+                if (right == F)
                 {
                     ++x;
+                    if (flag == B || flag.empty())
+                    {
+                        flag = P;
+                        result.push_back(COM_P);
+                    }
+                    result.push_back(RIGHT);
+                }
+                else if (right == B && x != _rows - 2 && _map.at(y).at(x + 2) != W)
+                {
+                    ++x;
+                    if (flag == P || flag.empty())
+                    {
+                        flag = B;
+                        result.push_back(COM_B);
+                    }
+                    result.push_back(RIGHT);
+                    if (flag == B || flag.empty())
+                    {
+                        flag = P;
+                        result.push_back(COM_P);
+                    }
                     result.push_back(RIGHT);
                 }
             }
@@ -271,10 +366,23 @@ std::vector<std::string> Map::keyAnalyse(std::string &keys) const
             break;
         }
     }
+
     return result;
 }
 
 void Map::setPlayerPosition(const int x, const int y)
 {
     _player.to(x, y);
+}
+
+void Map::moveBox(const int dx, const int dy)
+{
+    int x = _player.x();
+    int y = _player.y();
+    if (x + dx < 0 || x + dx > _rows - 1 || x + dx + (dx > 0) - (dx < 0) > _rows - 1)
+        return;
+    else if (y + dy < 0 || y + dy > _columns - 1 || y + dy + (dy > 0) - (dy < 0) > _columns - 1)
+        return;
+    _map.at(y + dy).at(x + dx) = F;
+    _map.at(y + dy + (dy > 0) - (dy < 0)).at(x + dx + (dx > 0) - (dx < 0)) = B;
 }

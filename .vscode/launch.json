@@ -8,7 +8,8 @@
             "program": "${workspaceFolder}/bin/game",
             "args": [],
             "cwd": "${workspaceFolder}",
-            "MIMode": "lldb"
+            "MIMode": "lldb",
+            "externalConsole": true
         }
     ]
 }
