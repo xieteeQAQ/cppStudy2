@@ -6,6 +6,11 @@
 #include "Player.hpp"
 
 extern const std::string F;
+extern const std::string UP;
+extern const std::string RIGHT;
+extern const std::string DOWN;
+extern const std::string LEFT;
+extern const std::string QUIT;
 
 using mv = std::vector<std::vector<std::string>>;
 
@@ -28,6 +33,7 @@ public:
     void refresh();
     void show();
     void movePlayer(const int dx, const int dy);
+    std::vector<std::string> keyAnalyse(std::string &keys);
 
 private:
     int _rows = 0;

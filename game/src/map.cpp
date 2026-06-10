@@ -2,6 +2,11 @@
 #include "../include/map.hpp"
 
 const std::string F = ". ";
+const std::string UP = "UP";
+const std::string RIGHT = "RIGHT";
+const std::string DOWN = "DOWN";
+const std::string LEFT = "LEFT";
+const std::string QUIT = "QUIT";
 
 using mv = std::vector<std::vector<std::string>>;
 
@@ -206,4 +211,51 @@ mv &Map::map()
 void Map::inPlayer(Player &player)
 {
     _player = player;
+}
+
+std::vector<std::string> Map::keyAnalyse(std::string &keys)
+{
+    std::vector<std::string> result{};
+    int x = _player.where()[0];
+    int y = _player.where()[1];
+    for (const auto &c : keys)
+    {
+        switch (c)
+        {
+        case 'w':
+            if (y != 0)
+            {
+                --y;
+                result.push_back(UP);
+            }
+            break;
+        case 'a':
+            if (x != 0)
+            {
+                --x;
+                result.push_back(LEFT);
+            }
+            break;
+        case 's':
+            if (y != _columns - 1)
+            {
+                ++y;
+                result.push_back(DOWN);
+            }
+            break;
+        case 'd':
+            if (x != _rows - 1)
+            {
+                ++x;
+                result.push_back(RIGHT);
+            }
+            break;
+        case 'q':
+                result.push_back(QUIT);
+            break;
+        default:
+            break;
+        }
+    }
+    return result;
 }
