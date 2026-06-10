@@ -20,3 +20,25 @@ std::vector<int> Player::where() const
     std::vector<int> _x_y = {x, y};
     return _x_y;
 }
+
+void Player::to(const int x, const int y)
+{
+    _x = x;
+    _y = y;
+}
+
+int Player::x() const
+{
+    return _x;
+}
+
+int Player::y() const
+{
+    return _y;
+}
+
+Player Player::operator=(Player player)
+{
+    _x = player.x();
+    _y = player.y();
+}

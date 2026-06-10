@@ -23,17 +23,18 @@ public:
     explicit Map(const std::string &mapName, const int &rows, const int &cols, const mv &initMap);
     explicit Map(const std::string &mapName, const mv &initMap);
 
-    Player &player();
-    int &rows();
-    int &cols();
-    mv &map();
+    Player player() const;
+    int rows() const;
+    int cols() const;
+    mv map() const;
     void inPlayer(Player &player);
     void setMapSize(const int &rows, const int &cols);
     void init(const mv &initMap);
     void refresh();
-    void show();
+    void show() const;
     void movePlayer(const int dx, const int dy);
-    std::vector<std::string> keyAnalyse(std::string &keys);
+    void setPlayerPosition(const int x, const int y);
+    std::vector<std::string> keyAnalyse(std::string &keys) const;
 
 private:
     int _rows = 0;

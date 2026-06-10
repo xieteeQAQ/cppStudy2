@@ -146,15 +146,15 @@ void Map::refresh()
     {
         for (size_t r = 0; r < _map.at(c).size(); ++r)
         {
-            if (r == _player.where()[0] && c == _player.where()[1])
+            if (r == _player.x() && c == _player.y())
                 _map.at(c).at(r) = "@ ";
             else
                 _map.at(c).at(r) = ". ";
         }
     }
 }
-
-void Map::show()
+ 
+void Map::show() const
 {
     if (_map.empty())
     {
@@ -178,8 +178,8 @@ void Map::show()
 
 void Map::movePlayer(const int dx, const int dy)
 {
-    int x = _player.where()[0] + dx;
-    int y = _player.where()[1] + dy;
+    int x = _player.x() + dx;
+    int y = _player.y() + dy;
     if (x < 0 || x > _rows - 1)
         return;
     else
@@ -190,20 +190,20 @@ void Map::movePlayer(const int dx, const int dy)
         _player.move(0, dy);
 }
 
-Player &Map::player()
+Player Map::player() const
 {
-    return this->_player;
+    return _player;
 }
 
-int &Map::rows()
+int Map::rows() const
 {
     return this->_rows;
 }
-int &Map::cols()
+int Map::cols() const
 {
     return this->_columns;
 }
-mv &Map::map()
+mv Map::map() const
 {
     return this->_map;
 }
@@ -213,11 +213,11 @@ void Map::inPlayer(Player &player)
     _player = player;
 }
 
-std::vector<std::string> Map::keyAnalyse(std::string &keys)
+std::vector<std::string> Map::keyAnalyse(std::string &keys) const
 {
     std::vector<std::string> result{};
-    int x = _player.where()[0];
-    int y = _player.where()[1];
+    int x = _player.x();
+    int y = _player.y();
     for (const auto &c : keys)
     {
         switch (c)
@@ -258,4 +258,9 @@ std::vector<std::string> Map::keyAnalyse(std::string &keys)
         }
     }
     return result;
+}
+
+void Map::setPlayerPosition(const int x, const int y)
+{
+    _player.to(x, y);
 }
