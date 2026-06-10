@@ -6,6 +6,8 @@
 #include "Player.hpp"
 
 extern const std::string F;
+extern const std::string B;
+
 extern const std::string UP;
 extern const std::string RIGHT;
 extern const std::string DOWN;

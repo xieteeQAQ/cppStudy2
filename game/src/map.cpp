@@ -2,6 +2,8 @@
 #include "../include/map.hpp"
 
 const std::string F = ". ";
+const std::string B = "■ ";
+
 const std::string UP = "UP";
 const std::string RIGHT = "RIGHT";
 const std::string DOWN = "DOWN";
@@ -148,12 +150,12 @@ void Map::refresh()
         {
             if (r == _player.x() && c == _player.y())
                 _map.at(c).at(r) = "@ ";
-            else
-                _map.at(c).at(r) = ". ";
+            else if (_map.at(c).at(r) != B)
+                _map.at(c).at(r) = F;
         }
     }
 }
- 
+
 void Map::show() const
 {
     if (_map.empty())
@@ -225,33 +227,45 @@ std::vector<std::string> Map::keyAnalyse(std::string &keys) const
         case 'w':
             if (y != 0)
             {
-                --y;
-                result.push_back(UP);
+                if (_map.at(y - 1).at(x) != B)
+                {
+                    --y;
+                    result.push_back(UP);
+                }
             }
             break;
         case 'a':
             if (x != 0)
             {
-                --x;
-                result.push_back(LEFT);
+                if (_map.at(y).at(x - 1) != B)
+                {
+                    --x;
+                    result.push_back(LEFT);
+                }
             }
             break;
         case 's':
             if (y != _columns - 1)
             {
-                ++y;
-                result.push_back(DOWN);
+                if (_map.at(y + 1).at(x) != B)
+                {
+                    ++y;
+                    result.push_back(DOWN);
+                }
             }
             break;
         case 'd':
             if (x != _rows - 1)
             {
-                ++x;
-                result.push_back(RIGHT);
+                if (_map.at(y).at(x + 1) != B)
+                {
+                    ++x;
+                    result.push_back(RIGHT);
+                }
             }
             break;
         case 'q':
-                result.push_back(QUIT);
+            result.push_back(QUIT);
             break;
         default:
             break;
