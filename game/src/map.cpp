@@ -88,6 +88,20 @@ Map::Map(const std::string &mapName, const mv &initMap)
     _map = initMap;
 }
 
+Map::Map(const mv &initMap)
+{
+    if (initMap.empty())
+        return;
+    _columns = initMap.size();
+    std::vector<int> allRows{};
+    for (auto &c : initMap)
+    {
+        allRows.push_back(c.size());
+    }
+    _rows = *std::max_element(allRows.begin(), allRows.end());
+    _map = initMap;
+}
+
 void Map::setMapSize(const int &rows, const int &cols)
 {
     if (_map.empty())
@@ -221,12 +235,18 @@ void Map::inPlayer(Player &player)
     _player = player;
 }
 
+std::string Map::at(const int x, const int y) const
+{
+    return _map.at(y).at(x);
+}
+
 std::vector<std::string> Map::keyAnalyse(std::string &keys) const
 {
     std::vector<std::string> result{};
-    std::string flag{};
+    mv copy_map(_map);
     int x = _player.x();
     int y = _player.y();
+    copy_map.at(y).at(x) = F;
     for (const auto &c : keys)
     {
         switch (c)
@@ -234,31 +254,21 @@ std::vector<std::string> Map::keyAnalyse(std::string &keys) const
         case 'w':
             if (y != 0)
             {
-                std::string up = _map.at(y - 1).at(x);
+                std::string up = copy_map.at(y - 1).at(x);
                 if (up == F)
                 {
                     --y;
-                    if (flag == B || flag.empty())
-                    {
-                        flag = P;
-                        result.push_back(COM_P);
-                    }
+                    result.push_back(COM_P);
                     result.push_back(UP);
                 }
-                else if (up == B && y != 1 && _map.at(y - 2).at(x) != W)
+                else if (up == B && y != 1 && copy_map.at(y - 2).at(x) != W)
                 {
+                    copy_map.at(y - 1).at(x) = F;
+                    copy_map.at(y - 2).at(x) = B;
                     --y;
-                    if (flag == P || flag.empty())
-                    {
-                        flag = B;
-                        result.push_back(COM_B);
-                    }
+                    result.push_back(COM_B);
                     result.push_back(UP);
-                    if (flag == B || flag.empty())
-                    {
-                        flag = P;
-                        result.push_back(COM_P);
-                    }
+                    result.push_back(COM_P);
                     result.push_back(UP);
                 }
             }
@@ -266,31 +276,21 @@ std::vector<std::string> Map::keyAnalyse(std::string &keys) const
         case 'a':
             if (x != 0)
             {
-                std::string left = _map.at(y).at(x - 1);
+                std::string left = copy_map.at(y).at(x - 1);
                 if (left == F)
                 {
                     --x;
-                    if (flag == B || flag.empty())
-                    {
-                        flag = P;
-                        result.push_back(COM_P);
-                    }
+                    result.push_back(COM_P);
                     result.push_back(LEFT);
                 }
-                else if (left == B && x != 1 && _map.at(y).at(x - 2) != W)
+                else if (left == B && x != 1 && copy_map.at(y).at(x - 2) != W)
                 {
+                    copy_map.at(y).at(x - 1) = F;
+                    copy_map.at(y).at(x - 2) = B;
                     --x;
-                    if (flag == P || flag.empty())
-                    {
-                        flag = B;
-                        result.push_back(COM_B);
-                    }
+                    result.push_back(COM_B);
                     result.push_back(LEFT);
-                    if (flag == B || flag.empty())
-                    {
-                        flag = P;
-                        result.push_back(COM_P);
-                    }
+                    result.push_back(COM_P);
                     result.push_back(LEFT);
                 }
             }
@@ -298,31 +298,21 @@ std::vector<std::string> Map::keyAnalyse(std::string &keys) const
         case 's':
             if (y != _columns - 1)
             {
-                std::string down = _map.at(y + 1).at(x);
+                std::string down = copy_map.at(y + 1).at(x);
                 if (down == F)
                 {
                     ++y;
-                    if (flag == B || flag.empty())
-                    {
-                        flag = P;
-                        result.push_back(COM_P);
-                    }
+                    result.push_back(COM_P);
                     result.push_back(DOWN);
                 }
-                else if (down == B && y != _columns - 2 && _map.at(y + 2).at(x) != W)
+                else if (down == B && y != _columns - 2 && copy_map.at(y + 2).at(x) != W)
                 {
+                    copy_map.at(y + 1).at(x) = F;
+                    copy_map.at(y + 2).at(x) = B;
                     ++y;
-                    if (flag == P || flag.empty())
-                    {
-                        flag = B;
-                        result.push_back(COM_B);
-                    }
+                    result.push_back(COM_B);
                     result.push_back(DOWN);
-                    if (flag == B || flag.empty())
-                    {
-                        flag = P;
-                        result.push_back(COM_P);
-                    }
+                    result.push_back(COM_P);
                     result.push_back(DOWN);
                 }
             }
@@ -330,31 +320,21 @@ std::vector<std::string> Map::keyAnalyse(std::string &keys) const
         case 'd':
             if (x != _rows - 1)
             {
-                std::string right = _map.at(y).at(x + 1);
+                std::string right = copy_map.at(y).at(x + 1);
                 if (right == F)
                 {
                     ++x;
-                    if (flag == B || flag.empty())
-                    {
-                        flag = P;
-                        result.push_back(COM_P);
-                    }
+                    result.push_back(COM_P);
                     result.push_back(RIGHT);
                 }
-                else if (right == B && x != _rows - 2 && _map.at(y).at(x + 2) != W)
+                else if (right == B && x != _rows - 2 && copy_map.at(y).at(x + 2) != W)
                 {
+                    copy_map.at(y).at(x + 1) = F;
+                    copy_map.at(y).at(x + 2) = B;
                     ++x;
-                    if (flag == P || flag.empty())
-                    {
-                        flag = B;
-                        result.push_back(COM_B);
-                    }
+                    result.push_back(COM_B);
                     result.push_back(RIGHT);
-                    if (flag == B || flag.empty())
-                    {
-                        flag = P;
-                        result.push_back(COM_P);
-                    }
+                    result.push_back(COM_P);
                     result.push_back(RIGHT);
                 }
             }

@@ -29,6 +29,7 @@ public:
     explicit Map(const std::string &mapName, const int &rows, const int &cols);
     explicit Map(const std::string &mapName, const int &rows, const int &cols, const mv &initMap);
     explicit Map(const std::string &mapName, const mv &initMap);
+    explicit Map(const mv &initMap);
 
     Player player() const;
     int rows() const;
@@ -42,6 +43,7 @@ public:
     void movePlayer(const int dx, const int dy);
     void setPlayerPosition(const int x, const int y);
     void moveBox(const int dx, const int dy);
+    std::string at(const int x, const int y) const;
     std::vector<std::string> keyAnalyse(std::string &keys) const;
 
 private:

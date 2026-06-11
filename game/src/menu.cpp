@@ -10,7 +10,7 @@ void Menu::startGame(Map &Level) const
     std::vector<std::string> step{};
     bool flag = true;
 
-    Level.setPlayerPosition(static_cast<int>(Level.rows() / 2) + 5, static_cast<int>(Level.cols() / 2));
+    Level.setPlayerPosition(static_cast<int>(Level.rows() / 2) + 6, static_cast<int>(Level.cols() / 2) - 1);
     std::string position = "player: (" + std::to_string(Level.player().x()) + ", " + std::to_string(Level.player().y()) + ")\n";
 
     std::cout << position;
@@ -31,15 +31,27 @@ void Menu::startGame(Map &Level) const
         if (step.empty())
             continue;
 
-        std::string mode;
-        // to do: 当player连续移动时, player会莫名奇妙终止移动,box可能会被吞掉, 太晚了早点睡
+        std::string mode = step[0];
         for (auto com = step.begin(); com != step.end(); ++com)
         {
-            mode = *com;
+            if (*com == COM_B)
+            {
+                mode = COM_B;
+                continue;
+            }
+            else if (*com == COM_P)
+            {
+                mode = COM_P;
+                continue;
+            }
+            else if (*com == QUIT)
+            {
+                flag = false;
+                break;
+            }
+
             if (mode == COM_P)
             {
-                if (*com == COM_P)
-                    ++com;
                 if (com != step.end() && *com != COM_B)
                 {
                     if (*com == UP)
@@ -50,19 +62,12 @@ void Menu::startGame(Map &Level) const
                         Level.movePlayer(0, 1);
                     else if (*com == LEFT)
                         Level.movePlayer(-1, 0);
-                    else if (*com == QUIT)
-                    {
-                        flag = false;
-                        break;
-                    }
                 }
                 else if (com != step.end() && *com == COM_B)
                     mode = COM_B;
             }
             else if (mode == COM_B)
             {
-                if (mode == COM_B)
-                    ++com;
                 if (com != step.end() && *com != COM_P)
                 {
                     if (*com == UP)
@@ -73,17 +78,13 @@ void Menu::startGame(Map &Level) const
                         Level.moveBox(0, 1);
                     else if (*com == LEFT)
                         Level.moveBox(-1, 0);
-                    else if (*com == QUIT)
-                    {
-                        flag = false;
-                        break;
-                    }
                 }
                 else if (com != step.end() && *com == COM_P)
                     mode = COM_P;
             }
-            if (mode == QUIT)
+            else
             {
+                std::cout << "mode未定义!\n";
                 flag = false;
                 break;
             }
@@ -96,7 +97,7 @@ void Menu::startGame(Map &Level) const
             std::cout << position;
             std::cout << debug << "\n";
             ++debug;
-            if (com != --step.end())
+            if (com != --step.end() && mode != COM_B)
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
         step.clear();
@@ -129,41 +130,63 @@ void Menu::startGame(Map &Level, Player &player) const
 
         if (step.empty())
             continue;
-        for (auto com = step.begin(); com != step.end(); com++)
+
+        std::string mode = step[0];
+        for (auto com = step.begin(); com != step.end(); ++com)
         {
-            if (*com == COM_P && com + 1 != step.end())
+            if (*com == COM_B)
             {
-                ++com;
-                if (*com == UP)
-                    Level.movePlayer(0, -1);
-                else if (*com == RIGHT)
-                    Level.movePlayer(1, 0);
-                else if (*com == DOWN)
-                    Level.movePlayer(0, 1);
-                else if (*com == LEFT)
-                    Level.movePlayer(-1, 0);
-                else if (*com == QUIT)
-                {
-                    flag = false;
-                    break;
-                }
+                mode = COM_B;
+                continue;
             }
-            else if (*com == COM_B && com + 1 != step.end())
+            else if (*com == COM_P)
             {
-                ++com;
-                if (*com == UP)
-                    Level.moveBox(0, -1);
-                else if (*com == RIGHT)
-                    Level.moveBox(1, 0);
-                else if (*com == DOWN)
-                    Level.moveBox(0, 1);
-                else if (*com == LEFT)
-                    Level.moveBox(-1, 0);
-                else if (*com == QUIT)
+                mode = COM_P;
+                continue;
+            }
+            else if (*com == QUIT)
+            {
+                flag = false;
+                break;
+            }
+
+            if (mode == COM_P)
+            {
+                if (com != step.end() && *com != COM_B)
                 {
-                    flag = false;
-                    break;
+                    if (*com == UP)
+                        Level.movePlayer(0, -1);
+                    else if (*com == RIGHT)
+                        Level.movePlayer(1, 0);
+                    else if (*com == DOWN)
+                        Level.movePlayer(0, 1);
+                    else if (*com == LEFT)
+                        Level.movePlayer(-1, 0);
                 }
+                else if (com != step.end() && *com == COM_B)
+                    mode = COM_B;
+            }
+            else if (mode == COM_B)
+            {
+                if (com != step.end() && *com != COM_P)
+                {
+                    if (*com == UP)
+                        Level.moveBox(0, -1);
+                    else if (*com == RIGHT)
+                        Level.moveBox(1, 0);
+                    else if (*com == DOWN)
+                        Level.moveBox(0, 1);
+                    else if (*com == LEFT)
+                        Level.moveBox(-1, 0);
+                }
+                else if (com != step.end() && *com == COM_P)
+                    mode = COM_P;
+            }
+            else
+            {
+                std::cout << "mode未定义!\n";
+                flag = false;
+                break;
             }
 
             system("clear");
