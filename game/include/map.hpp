@@ -17,6 +17,7 @@ extern const std::string RIGHT;
 extern const std::string DOWN;
 extern const std::string LEFT;
 extern const std::string QUIT;
+extern const std::string RESTART;
 
 extern const std::string COM_P;
 extern const std::string COM_B;
@@ -37,6 +38,7 @@ public:
     int rows() const;
     int cols() const;
     mv map() const;
+    void reInit();
     void inPlayer(Player &player);
     void setMapSize(const int &rows, const int &cols);
     void refresh();
@@ -53,6 +55,7 @@ private:
     int _columns = 0;
     std::string _mapName{};
     mv _map{};
+    mv _init_map{};
     Player _player{0, 0};
     std::vector<int> _star{0, 0};
 };

@@ -13,6 +13,7 @@ const std::string RIGHT = "RIGHT";
 const std::string DOWN = "DOWN";
 const std::string LEFT = "LEFT";
 const std::string QUIT = "QUIT";
+const std::string RESTART = "RESTART";
 
 const std::string COM_P = "COM_P";
 const std::string COM_B = "COM_B";
@@ -36,6 +37,7 @@ Map::Map(const int &rows, const int &cols)
             c.push_back("? ");
         }
     }
+    _init_map = _map;
 }
 
 Map::Map(const std::string &mapName, const int &rows, const int &cols)
@@ -55,6 +57,7 @@ Map::Map(const std::string &mapName, const int &rows, const int &cols)
             c.push_back("? ");
         }
     }
+    _init_map = _map;
 }
 
 Map::Map(const std::string &mapName, const mv &initMap)
@@ -83,6 +86,7 @@ Map::Map(const std::string &mapName, const mv &initMap)
     }
 
     _map = initMap;
+    _init_map = initMap;
 }
 
 Map::Map(const mv &initMap)
@@ -110,6 +114,23 @@ Map::Map(const mv &initMap)
     }
 
     _map = initMap;
+    _init_map = initMap;
+}
+
+void Map::reInit()
+{
+    for (int c = 0; c < _columns; ++c)
+    {
+        for (int r = 0; r < _rows; ++r)
+        {
+            if (_init_map[c][r] == P)
+                _player.to(r, c);
+            else if (_init_map[c][r] == S)
+                _star = {r, c};
+        }
+    }
+
+    _map = _init_map;
 }
 
 void Map::setMapSize(const int &rows, const int &cols)
@@ -356,6 +377,9 @@ std::vector<std::string> Map::keyAnalyse(std::string &keys) const
                 std::string key = RIGHT;
                 executeAnalyse(result, key, copy_map, x, y);
             }
+            break;
+        case 'r':
+            result.push_back(RESTART);
             break;
         case 'q':
             result.push_back(QUIT);

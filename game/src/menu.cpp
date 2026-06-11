@@ -64,6 +64,11 @@ void Menu::gameLoop(Map &Level, std::string &input, std::vector<std::string> &st
                 flag = false;
                 break;
             }
+            else if (*com == RESTART)
+            {
+                Level.reInit();
+                continue;
+            }
             else if (*com == QUIT)
             {
                 flag = false;
