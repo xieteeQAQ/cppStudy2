@@ -54,25 +54,6 @@ Map::Map(const std::string &mapName, const int &rows, const int &cols)
     }
 }
 
-Map::Map(const std::string &mapName, const int &rows, const int &cols, const mv &initMap)
-{
-    _mapName = mapName;
-    _rows = rows;
-    _columns = cols;
-    for (int i = 0; i < _columns; ++i)
-    {
-        std::vector<std::string> c{};
-        _map.push_back(c);
-    }
-    for (auto &c : _map)
-    {
-        while (c.size() < _rows)
-        {
-            c.push_back("? ");
-        }
-    }
-    this->init(initMap);
-}
 Map::Map(const std::string &mapName, const mv &initMap)
 {
     if (initMap.empty())
@@ -80,11 +61,22 @@ Map::Map(const std::string &mapName, const mv &initMap)
     _mapName = mapName;
     _columns = initMap.size();
     std::vector<int> allRows{};
+
     for (auto &c : initMap)
     {
         allRows.push_back(c.size());
     }
     _rows = *std::max_element(allRows.begin(), allRows.end());
+
+    for (int c = 0; c < _columns; ++c)
+    {
+        for (int r = 0; r < _rows; ++r)
+        {
+            if (initMap[c][r] == P)
+                _player.to(r, c);
+        }
+    }
+
     _map = initMap;
 }
 
@@ -94,11 +86,22 @@ Map::Map(const mv &initMap)
         return;
     _columns = initMap.size();
     std::vector<int> allRows{};
+
     for (auto &c : initMap)
     {
         allRows.push_back(c.size());
     }
     _rows = *std::max_element(allRows.begin(), allRows.end());
+
+    for (int c = 0; c < _columns; ++c)
+    {
+        for (int r = 0; r < _rows; ++r)
+        {
+            if (initMap[c][r] == P)
+                _player.to(r, c);
+        }
+    }
+
     _map = initMap;
 }
 
@@ -137,27 +140,6 @@ void Map::setMapSize(const int &rows, const int &cols)
             }
         }
         _rows = rows;
-    }
-}
-
-void Map::init(const mv &initMap)
-{
-    if (initMap.empty())
-        return;
-    size_t initc = 0;
-    for (auto &c : _map)
-    {
-        if (initc < initMap.size())
-        {
-            size_t initr = 0;
-            for (auto &r : c)
-            {
-                if (initr < initMap.at(initc).size())
-                    r = initMap.at(initc).at(initr);
-                ++initr;
-            }
-        }
-        ++initc;
     }
 }
 

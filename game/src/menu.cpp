@@ -10,7 +10,6 @@ void Menu::startGame(Map &Level) const
     std::vector<std::string> step{};
     bool flag = true;
 
-    Level.setPlayerPosition(static_cast<int>(Level.rows() / 2) + 6, static_cast<int>(Level.cols() / 2) - 1);
     std::string position = "player: (" + std::to_string(Level.player().x()) + ", " + std::to_string(Level.player().y()) + ")\n";
 
     gameLoop(Level, input, step, position, flag);

@@ -27,7 +27,6 @@ public:
     Map() {};
     explicit Map(const int &rows, const int &cols);
     explicit Map(const std::string &mapName, const int &rows, const int &cols);
-    explicit Map(const std::string &mapName, const int &rows, const int &cols, const mv &initMap);
     explicit Map(const std::string &mapName, const mv &initMap);
     explicit Map(const mv &initMap);
 
@@ -37,7 +36,6 @@ public:
     mv map() const;
     void inPlayer(Player &player);
     void setMapSize(const int &rows, const int &cols);
-    void init(const mv &initMap);
     void refresh();
     void show() const;
     void movePlayer(const int dx, const int dy);
