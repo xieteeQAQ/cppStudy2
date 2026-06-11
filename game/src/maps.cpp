@@ -3,7 +3,7 @@
 
 mv Level_1_init =
     {
-        {F, F, F, F},
+        {S, F, F, F},
         {F, F, F, F},
         {F, F, B, F},
         {F, F, F, P}

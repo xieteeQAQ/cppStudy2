@@ -58,6 +58,12 @@ void Menu::gameLoop(Map &Level, std::string &input, std::vector<std::string> &st
                 mode = COM_P;
                 continue;
             }
+            else if (*com == WIN)
+            {
+                std::cout << "通关!\n";
+                flag = false;
+                break;
+            }
             else if (*com == QUIT)
             {
                 flag = false;

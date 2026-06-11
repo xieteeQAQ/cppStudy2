@@ -9,6 +9,8 @@ extern const std::string P;
 extern const std::string F;
 extern const std::string W;
 extern const std::string B;
+extern const std::string S;
+extern const std::string FINISH;
 
 extern const std::string UP;
 extern const std::string RIGHT;
@@ -18,6 +20,7 @@ extern const std::string QUIT;
 
 extern const std::string COM_P;
 extern const std::string COM_B;
+extern const std::string WIN;
 
 using mv = std::vector<std::vector<std::string>>;
 
@@ -42,6 +45,7 @@ public:
     void setPlayerPosition(const int x, const int y);
     void moveBox(const int dx, const int dy);
     std::string at(const int x, const int y) const;
+    void executeAnalyse(std::vector<std::string> &res, std::string &key, mv &copy_map, int &x, int &y) const;
     std::vector<std::string> keyAnalyse(std::string &keys) const;
 
 private:
@@ -50,4 +54,5 @@ private:
     std::string _mapName{};
     mv _map{};
     Player _player{0, 0};
+    std::vector<int> _star{0, 0};
 };
