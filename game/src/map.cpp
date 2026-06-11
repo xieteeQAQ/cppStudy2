@@ -293,7 +293,7 @@ void Map::executeAnalyse(std::vector<std::string> &res, std::string &key, mv &co
         res.push_back(COM_P);
         res.push_back(key);
     }
-    else if (next == B && Boundary_determination() && (next != W && copy_map.at(y + 2 * dy).at(x + 2 * dx) != FINISH))
+    else if (next == B && Boundary_determination() && (copy_map.at(y + 2 * dy).at(x + 2 * dx) != W && copy_map.at(y + 2 * dy).at(x + 2 * dx) != FINISH))
     {
         std::string &nex_next = copy_map.at(y + 2 * dy).at(x + 2 * dx);
 

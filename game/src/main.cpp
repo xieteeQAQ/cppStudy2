@@ -11,7 +11,13 @@
 int main()
 {
     Menu menu{};
-    menu.startGame(Level_1);
+    for (auto &m : Levels)
+    {
+        menu.startGame(m);
+        std::cout << "按任意键继续...\n";
+        char c{};
+        std::cin >> c;
+    }
 
     return 0;
 }
