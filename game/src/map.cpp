@@ -79,7 +79,11 @@ Map::Map(const std::string &mapName, const mv &initMap)
         for (int r = 0; r < _rows; ++r)
         {
             if (initMap[c][r] == P)
+            {
+                _orign_x = r;
+                _orign_y = c;
                 _player.to(r, c);
+            }
             else if (initMap[c][r] == S)
                 _star = {r, c};
         }
@@ -107,7 +111,11 @@ Map::Map(const mv &initMap)
         for (int r = 0; r < _rows; ++r)
         {
             if (initMap[c][r] == P)
+            {
+                _orign_x = r;
+                _orign_y = c;
                 _player.to(r, c);
+            }
             else if (initMap[c][r] == S)
                 _star = {r, c};
         }
@@ -119,18 +127,13 @@ Map::Map(const mv &initMap)
 
 void Map::reInit()
 {
-    for (int c = 0; c < _columns; ++c)
+    if (_init_map.empty())
+        std::clog << "地图初始化失败!\n";
+    else
     {
-        for (int r = 0; r < _rows; ++r)
-        {
-            if (_init_map[c][r] == P)
-                _player.to(r, c);
-            else if (_init_map[c][r] == S)
-                _star = {r, c};
-        }
+        _player.to(_orign_x, _orign_y);
+        _map = _init_map;
     }
-
-    _map = _init_map;
 }
 
 void Map::setMapSize(const int &rows, const int &cols)
@@ -416,4 +419,12 @@ void Map::moveBox(const int dx, const int dy)
         _map.at(y + dy).at(x + dx) = F;
         _map.at(y + dy + (dy > 0) - (dy < 0)).at(x + dx + (dx > 0) - (dx < 0)) = B;
     }
+}
+
+bool Map::empty() const
+{
+    if (_map.empty())
+        return true;
+    else
+        return false;
 }

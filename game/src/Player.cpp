@@ -29,7 +29,7 @@ int Player::y() const
     return _y;
 }
 
-Player Player::operator=(Player player)
+void Player::operator=(Player player)
 {
     _x = player.x();
     _y = player.y();

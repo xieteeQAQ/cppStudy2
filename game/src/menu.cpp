@@ -4,8 +4,60 @@
 #include <chrono>
 #include "../include/menu.hpp"
 
+Menu::Menu(std::vector<Map> &Levels)
+{
+    _Levels = Levels;
+    _LevelsCount = _Levels.size();
+}
+
+void Menu::startMenu()
+{
+    std::string input{};
+    bool flag = true;
+    while (flag)
+    {
+        int num = 0;
+        std::cout << "请选择接下来的行动\n [1]输入q退出 [2]输入数字选择关卡\n";
+        std::cin >> input;
+        system("clear");
+        char key = input[0];
+        switch (key)
+        {
+        case 'q':
+            flag = false;
+            break;
+        default:
+            if (isdigit(key))
+            {
+                num = key - '0';
+                if (num <= _LevelsCount && num >= 1)
+                {
+                    this->startGame(this->selectLevel(num));
+                    system("clear");
+                }
+                else
+                    std::cout << "· 没有这个关卡!\n";
+            }
+            break;
+        }
+    }
+}
+
+
+int Menu::LevelsCount() const
+{
+    return _LevelsCount;
+}
+
 void Menu::startGame(Map &Level) const
 {
+    if (Level.empty())
+    {
+        std::clog << "开始游戏的地图为空!\n";
+        return;
+    }
+    Level.reInit();
+
     std::string input{};
     std::vector<std::string> step{};
     bool flag = true;
@@ -17,6 +69,13 @@ void Menu::startGame(Map &Level) const
 
 void Menu::startGame(Map &Level, Player &player) const
 {
+    if (Level.empty())
+    {
+        std::clog << "开始游戏的地图为空!\n";
+        return;
+    }
+    Level.reInit();
+
     std::string input{};
     std::vector<std::string> step{};
     bool flag = true;
@@ -60,8 +119,9 @@ void Menu::gameLoop(Map &Level, std::string &input, std::vector<std::string> &st
             }
             else if (*com == WIN)
             {
-                std::cout << "通关!\n";
                 flag = false;
+                std::cout << "通关!\n请输入任意内容继续\n";
+                std::cin >> input;
                 break;
             }
             else if (*com == RESTART)
@@ -120,11 +180,32 @@ void Menu::gameLoop(Map &Level, std::string &input, std::vector<std::string> &st
             position = "player: (" + std::to_string(Level.player().x()) + ", " + std::to_string(Level.player().y()) + ")\n";
 
             std::cout << position;
-            std::cout << debug << "\n";
+            std::cout << "debug信息: " << debug << "\n";
             ++debug;
             if (com != --step.end() && mode != COM_B)
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
         step.clear();
+    }
+}
+
+Map &Menu::selectLevel(int number)
+{
+    int index = number - 1;
+    if (_Levels.empty())
+    {
+        std::cout << "关卡容器为空!\n";
+        static Map empty_map{};
+        return empty_map;
+    }
+    else if (index >= _Levels.size())
+    {
+        std::cout << "下标超出关卡容器!\n";
+        static Map empty_map{};
+        return empty_map;
+    }
+    else
+    {
+        return _Levels[index];
     }
 }

@@ -49,6 +49,7 @@ public:
     std::string at(const int x, const int y) const;
     void executeAnalyse(std::vector<std::string> &res, std::string &key, mv &copy_map, int &x, int &y) const;
     std::vector<std::string> keyAnalyse(std::string &keys) const;
+    bool empty() const;
 
 private:
     int _rows = 0;
@@ -57,5 +58,7 @@ private:
     mv _map{};
     mv _init_map{};
     Player _player{0, 0};
+    int _orign_x = 0;
+    int _orign_y = 0;
     std::vector<int> _star{0, 0};
 };

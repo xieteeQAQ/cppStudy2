@@ -15,7 +15,7 @@ public:
     int x() const;
     int y() const;
 
-    Player operator=(Player player);
+    void operator=(Player player);
 
 private:
     int _x = 0;
