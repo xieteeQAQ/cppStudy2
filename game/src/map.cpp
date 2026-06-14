@@ -1,4 +1,4 @@
-#include <algorithm>
+﻿#include <algorithm>
 #include "../include/map.hpp"
 
 const std::string P = "@ ";
@@ -345,7 +345,7 @@ void Map::executeAnalyse(std::vector<std::string> &res, std::string &key, mv &co
                     x_boundary = check_x >= 0 && check_x <= _rows - 1;
                     y_boundary = check_y >= 0 && check_y <= _columns - 1;
                     if (!(x_boundary && y_boundary))
-                        return; 
+                        return;
                     else
                         continue;
                 }
