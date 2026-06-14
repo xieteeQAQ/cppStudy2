@@ -1,12 +1,28 @@
 ﻿#include <algorithm>
 #include "../include/map.hpp"
 
-const std::string P = "@ ";
-const std::string F = ". ";
-const std::string W = "■ ";
-const std::string B = "□ ";
-const std::string S = "⭑ ";
-const std::string FINISH = "☑ ";
+// Internal tokens (ASCII) used for game logic — stable across platforms
+const std::string P = "P";
+const std::string F = "F";
+const std::string W = "W";
+const std::string B = "B";
+const std::string S = "S";
+const std::string FINISH = "FIN";
+
+// Display glyphs (may be UTF-8). Console/font support varies by platform.
+const std::string DISP_P = "@ ";
+const std::string DISP_F = ". ";
+#ifdef _WIN32
+const std::string DISP_W = "# ";
+const std::string DISP_B = "[]";
+const std::string DISP_S = "* ";
+const std::string DISP_FINISH = "[X]";
+#else
+const std::string DISP_W = u8"■ ";
+const std::string DISP_B = u8"□ ";
+const std::string DISP_S = u8"⭑ ";
+const std::string DISP_FINISH = u8"☑ ";
+#endif
 
 const std::string UP = "UP";
 const std::string RIGHT = "RIGHT";
@@ -212,6 +228,18 @@ void Map::show() const
             {
                 if (r.empty())
                     std::cout << "? ";
+                else if (r == P)
+                    std::cout << DISP_P;
+                else if (r == F)
+                    std::cout << DISP_F;
+                else if (r == W)
+                    std::cout << DISP_W;
+                else if (r == B)
+                    std::cout << DISP_B;
+                else if (r == S)
+                    std::cout << DISP_S;
+                else if (r == FINISH)
+                    std::cout << DISP_FINISH;
                 else
                     std::cout << r;
             }
