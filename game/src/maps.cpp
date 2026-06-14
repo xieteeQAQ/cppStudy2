@@ -37,3 +37,13 @@ const mv Level_4_init =
         {F, F, W, W, W, W, W},
         {F, F, F, B, B, F, F},
         {F, F, F, B, B, F, P}};
+
+const mv Level_5_init =
+    {
+        {F, F, F, B, F, F, F},
+        {B, F, F, B, F, B, F},
+        {F, F, F, W, F, F, P},
+        {B, B, W, W, W, W, W},
+        {F, F, F, W, F, F, S},
+        {F, F, F, B, F, F, F},
+        {F, B, B, B, F, F, F}};

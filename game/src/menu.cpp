@@ -118,7 +118,7 @@ void Menu::gameLoop(Map &Level, std::string &input, std::vector<std::string> &st
             else if (*com == WIN)
             {
                 flag = false;
-                std::cout << "通关!\n请输入任意内容继续\n";
+                std::cout << "通关!\n\n请输入任意内容继续\n";
                 std::cin >> input;
                 return;
             }
