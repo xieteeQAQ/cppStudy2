@@ -16,7 +16,7 @@ const std::string DISP_F = ". ";
 const std::string DISP_W = "# ";
 const std::string DISP_B = "[]";
 const std::string DISP_S = "* ";
-const std::string DISP_FINISH = "[X]";
+const std::string DISP_FINISH = "V ";
 #else
 const std::string DISP_W = u8"■ ";
 const std::string DISP_B = u8"□ ";
