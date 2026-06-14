@@ -15,6 +15,7 @@ public:
     void startGame(Map &Level, Player &player) const;
     int LevelsCount() const;
     static void gameLoop(Map &Level, std::string &input, std::vector<std::string> &step, std::string &position, bool &flag);
+    static void initLevels();
     Map &selectLevel(int number);
 
 private:

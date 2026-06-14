@@ -215,3 +215,12 @@ Map &Menu::selectLevel(int number)
         return _Levels[index];
     }
 }
+
+void Menu::initLevels()
+{
+    Map::generateMaps("Level_1", Level_1_init, Levels);
+    Map::generateMaps("Level_2", Level_2_init, Levels);
+    Map::generateMaps("Level_3", Level_3_init, Levels);
+    Map::generateMaps("Level_4", Level_4_init, Levels);
+    Map::generateMaps("Level_5", Level_5_init, Levels);
+}
