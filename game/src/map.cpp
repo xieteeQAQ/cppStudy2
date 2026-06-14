@@ -317,14 +317,55 @@ void Map::executeAnalyse(std::vector<std::string> &res, std::string &key, mv &co
         res.push_back(COM_P);
         res.push_back(key);
     }
-    else if (next == B && Boundary_determination() && (copy_map.at(y + 2 * dy).at(x + 2 * dx) != W && copy_map.at(y + 2 * dy).at(x + 2 * dx) != FINISH))
+    else if (next == B && Boundary_determination())
     {
         std::string &nex_next = copy_map.at(y + 2 * dy).at(x + 2 * dx);
+        if (nex_next == W && nex_next == FINISH)
+            return;
 
-        if (nex_next == S)
+        else if (nex_next == S)
         {
             next = F;
             nex_next = FINISH;
+        }
+        else if (nex_next == B)
+        {
+            int check_x = x + 3 * dx, check_y = y + 3 * dy;
+            bool x_boundary = check_x >= 0 && check_x <= _rows - 1;
+            bool y_boundary = check_y >= 0 && check_y <= _columns - 1;
+            if (!(x_boundary && y_boundary))
+                return;
+            while (x_boundary && y_boundary)
+            {
+                std::string &now = copy_map.at(check_y).at(check_x);
+                if (now == B)
+                {
+                    check_x += dx;
+                    check_y += dy;
+                    x_boundary = check_x >= 0 && check_x <= _rows - 1;
+                    y_boundary = check_y >= 0 && check_y <= _columns - 1;
+                    if (!(x_boundary && y_boundary))
+                        return; 
+                    else
+                        continue;
+                }
+                else if (now == S)
+                {
+                    now = FINISH;
+                    next = F;
+                    break;
+                }
+                else if (now == F)
+                {
+                    now = B;
+                    next = F;
+                    break;
+                }
+                else if (now == W || now == FINISH)
+                    return;
+                else
+                    return;
+            }
         }
         else
         {
@@ -404,20 +445,115 @@ void Map::moveBox(const int dx, const int dy)
 {
     int x = _player.x();
     int y = _player.y();
-    if (x + dx < 0 || x + dx > _rows - 1 || x + dx + (dx > 0) - (dx < 0) > _rows - 1)
+    int next_x = x + dx;
+    int next_y = y + dy;
+    int nex_next_x = x + dx + (dx > 0) - (dx < 0);
+    int nex_next_y = y + dy + (dy > 0) - (dy < 0);
+
+    if (next_x < 0 || next_x > _rows - 1 || nex_next_x < 0 || nex_next_x > _rows - 1)
         return;
-    else if (y + dy < 0 || y + dy > _columns - 1 || y + dy + (dy > 0) - (dy < 0) > _columns - 1)
+    else if (next_y < 0 || next_y > _columns - 1 || nex_next_y < 0 || nex_next_y > _columns - 1)
         return;
 
-    if (_map.at(y + dy + (dy > 0) - (dy < 0)).at(x + dx + (dx > 0) - (dx < 0)) == S)
+    std::string &self = _map.at(y).at(x);
+    std::string &next = _map.at(y + dy).at(x + dx);
+    std::string &nex_next = _map.at(y + dy + (dy > 0) - (dy < 0)).at(x + dx + (dx > 0) - (dx < 0));
+
+    if (self == P)
     {
-        _map.at(y + dy).at(x + dx) = F;
-        _map.at(y + dy + (dy > 0) - (dy < 0)).at(x + dx + (dx > 0) - (dx < 0)) = FINISH;
+        if (nex_next == F)
+        {
+            next = F;
+            nex_next = B;
+        }
+        else if (nex_next == S)
+        {
+            next = F;
+            nex_next = FINISH;
+        }
+        else if (nex_next == B)
+        {
+            moveBox((dx > 0) - (dx < 0), (dy > 0) - (dy < 0), next_x, next_y);
+        }
     }
-    else
+    else if (self == B)
     {
-        _map.at(y + dy).at(x + dx) = F;
-        _map.at(y + dy + (dy > 0) - (dy < 0)).at(x + dx + (dx > 0) - (dx < 0)) = B;
+        if (nex_next == F)
+        {
+            self = F;
+            nex_next = B;
+        }
+        else if (nex_next == S)
+        {
+            self = F;
+            nex_next = FINISH;
+        }
+        else if (nex_next == B)
+        {
+            moveBox((dx > 0) - (dx < 0), (dy > 0) - (dy < 0), next_x, next_y);
+            if (next == F)
+            {
+                next = B;
+                self = F;
+            }
+        }
+    }
+}
+
+void Map::moveBox(const int dx, const int dy, const int x, const int y)
+{
+    int next_x = x + dx;
+    int next_y = y + dy;
+    int nex_next_x = x + dx + (dx > 0) - (dx < 0);
+    int nex_next_y = x + dy + (dy > 0) - (dy < 0);
+
+    if (next_x < 0 || next_x > _rows - 1 || nex_next_x < 0 || nex_next_x > _rows - 1)
+        return;
+    else if (next_y < 0 || next_y > _columns - 1 || nex_next_y < 0 || nex_next_y > _columns - 1)
+        return;
+
+    std::string &self = _map.at(y).at(x);
+    std::string &next = _map.at(y + dy).at(x + dx);
+    std::string &nex_next = _map.at(y + dy + (dy > 0) - (dy < 0)).at(x + dx + (dx > 0) - (dx < 0));
+
+    if (self == P)
+    {
+        if (nex_next == F)
+        {
+            next = F;
+            nex_next = B;
+        }
+        else if (nex_next == S)
+        {
+            next = F;
+            nex_next = FINISH;
+        }
+        else if (nex_next == B)
+        {
+            moveBox((dx > 0) - (dx < 0), (dy > 0) - (dy < 0), next_x, next_y);
+        }
+    }
+    else if (self == B)
+    {
+        if (nex_next == F)
+        {
+            self = F;
+            nex_next = B;
+        }
+        else if (nex_next == S)
+        {
+            self = F;
+            nex_next = FINISH;
+        }
+        else if (nex_next == B)
+        {
+            moveBox((dx > 0) - (dx < 0), (dy > 0) - (dy < 0), next_x, next_y);
+            if (next == F)
+            {
+                next = B;
+                self = F;
+            }
+        }
     }
 }
 
@@ -427,4 +563,24 @@ bool Map::empty() const
         return true;
     else
         return false;
+}
+
+int Map::checkStar()
+{
+    if (_map[_star[1]][_star[0]] == FINISH)
+        return 1;
+    else
+        return 0;
+}
+
+void Map::generateMaps(mv &init_map, std::vector<Map> &Levels)
+{
+    Map Level(init_map);
+    Levels.push_back(Level);
+}
+
+void Map::generateMaps(std::string name, mv init_map, std::vector<Map> &Levels)
+{
+    Map Level(name, init_map);
+    Levels.push_back(Level);
 }

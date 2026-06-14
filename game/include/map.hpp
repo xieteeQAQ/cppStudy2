@@ -46,10 +46,14 @@ public:
     void movePlayer(const int dx, const int dy);
     void setPlayerPosition(const int x, const int y);
     void moveBox(const int dx, const int dy);
+    void moveBox(const int dx, const int dy, const int x, const int y);
     std::string at(const int x, const int y) const;
     void executeAnalyse(std::vector<std::string> &res, std::string &key, mv &copy_map, int &x, int &y) const;
     std::vector<std::string> keyAnalyse(std::string &keys) const;
     bool empty() const;
+    int checkStar();
+    static void generateMaps(mv &init_map, std::vector<Map> &Levels);
+    static void generateMaps(std::string name, mv init_map, std::vector<Map> &Levels);
 
 private:
     int _rows = 0;

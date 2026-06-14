@@ -43,7 +43,6 @@ void Menu::startMenu()
     }
 }
 
-
 int Menu::LevelsCount() const
 {
     return _LevelsCount;
@@ -94,7 +93,6 @@ void Menu::gameLoop(Map &Level, std::string &input, std::vector<std::string> &st
         Level.refresh();
         Level.show();
         position = "player: (" + std::to_string(Level.player().x()) + ", " + std::to_string(Level.player().y()) + ")\n";
-
         std::cout << position;
         std::cin >> input;
 
@@ -122,7 +120,7 @@ void Menu::gameLoop(Map &Level, std::string &input, std::vector<std::string> &st
                 flag = false;
                 std::cout << "通关!\n请输入任意内容继续\n";
                 std::cin >> input;
-                break;
+                return;
             }
             else if (*com == RESTART)
             {
@@ -132,7 +130,7 @@ void Menu::gameLoop(Map &Level, std::string &input, std::vector<std::string> &st
             else if (*com == QUIT)
             {
                 flag = false;
-                break;
+                return;
             }
 
             if (mode == COM_P)
@@ -180,10 +178,18 @@ void Menu::gameLoop(Map &Level, std::string &input, std::vector<std::string> &st
             position = "player: (" + std::to_string(Level.player().x()) + ", " + std::to_string(Level.player().y()) + ")\n";
 
             std::cout << position;
-            std::cout << "debug信息: " << debug << "\n";
+            if (debug > 0)
+                std::cout << "debug信息: " << debug << "\n";
             ++debug;
             if (com != --step.end() && mode != COM_B)
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+        if (Level.checkStar())
+        {
+            flag = false;
+            std::cout << "通关!\n请输入任意内容继续\n";
+            std::cin >> input;
+            return;
         }
         step.clear();
     }
