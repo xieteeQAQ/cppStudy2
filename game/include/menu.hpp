@@ -22,3 +22,5 @@ private:
     std::vector<Map> _Levels{};
     int _LevelsCount = 0;
 };
+
+void clear();

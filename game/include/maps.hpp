@@ -13,3 +13,4 @@ extern const mv Level_2_init;
 extern const mv Level_3_init;
 extern const mv Level_4_init;
 extern const mv Level_5_init;
+extern const mv Level_6_init;

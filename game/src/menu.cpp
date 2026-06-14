@@ -19,7 +19,7 @@ void Menu::startMenu()
         int num = 0;
         std::cout << "请选择接下来的行动\n [1]输入q退出 [2]输入数字选择关卡\n";
         std::cin >> input;
-        system("clear");
+        clear();
         char key = input[0];
         switch (key)
         {
@@ -33,7 +33,7 @@ void Menu::startMenu()
                 if (num <= _LevelsCount && num >= 1)
                 {
                     this->startGame(this->selectLevel(num));
-                    system("clear");
+                    clear();
                 }
                 else
                     std::cout << "· 没有这个关卡!\n";
@@ -89,7 +89,7 @@ void Menu::gameLoop(Map &Level, std::string &input, std::vector<std::string> &st
 {
     while (flag)
     {
-        system("clear");
+        clear();
         Level.refresh();
         Level.show();
         position = "player: (" + std::to_string(Level.player().x()) + ", " + std::to_string(Level.player().y()) + ")\n";
@@ -172,7 +172,7 @@ void Menu::gameLoop(Map &Level, std::string &input, std::vector<std::string> &st
                 break;
             }
 
-            system("clear");
+            clear();
             Level.refresh();
             Level.show();
             position = "player: (" + std::to_string(Level.player().x()) + ", " + std::to_string(Level.player().y()) + ")\n";
@@ -223,4 +223,14 @@ void Menu::initLevels()
     Map::generateMaps("Level_3", Level_3_init, Levels);
     Map::generateMaps("Level_4", Level_4_init, Levels);
     Map::generateMaps("Level_5", Level_5_init, Levels);
+    Map::generateMaps("Level_6", Level_6_init, Levels);
+}
+
+void clear()
+{
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
 }
